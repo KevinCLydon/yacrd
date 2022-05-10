@@ -23,12 +23,14 @@ SOFTWARE.
 /* local mod */
 pub mod extract;
 pub mod filter;
+pub mod pluck;
 pub mod scrubbing;
 pub mod split;
 
 /* stuff declare in submod need to be accessible from mod level */
 pub use self::extract::*;
 pub use self::filter::*;
+pub use self::pluck::*;
 pub use self::scrubbing::*;
 pub use self::split::*;
 

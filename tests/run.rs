@@ -298,4 +298,41 @@ mod tests {
         diff_unorder("tests/truth.yacrd", "tests/result.scrubb.yacrd");
         diff("tests/truth.scrubb.fastq", "tests/reads.scrubb.fastq")
     }
+
+    #[test]
+    fn pluck() {
+        let mut child = Command::new("./target/debug/yacrd")
+            .args(&[
+                "-i",
+                "tests/reads.paf",
+                "-o",
+                "tests/result.pluck.yacrd",
+                "pluck",
+                "-i",
+                "tests/reads.fastq",
+                "-o",
+                "tests/reads.pluck.fastq",
+                "-l",
+                "300"
+            ])
+            .stderr(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Couldn't create yacrd subprocess");
+
+        if !child.wait().expect("Error during yacrd run").success() {
+            let mut stdout = String::new();
+            let mut stderr = String::new();
+
+            child.stdout.unwrap().read_to_string(&mut stdout).unwrap();
+            child.stderr.unwrap().read_to_string(&mut stderr).unwrap();
+
+            println!("stdout: {}", stdout);
+            println!("stderr: {}", stderr);
+            panic!();
+        }
+
+        diff_unorder("tests/truth.yacrd", "tests/result.pluck.yacrd");
+        diff("tests/truth.pluck.fastq", "tests/reads.pluck.fastq")
+    }
 }

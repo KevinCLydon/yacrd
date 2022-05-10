@@ -113,6 +113,14 @@ fn main() -> Result<()> {
             params.not_coverage,
             params.buffer_size,
         )?,
+        Some(cli::SubCommand::Pluck(p)) => editor::pluck(
+            &p.input,
+            &p.output,
+            p.minimum_length.to_owned(),
+            &mut *reads2badregion,
+            params.not_coverage,
+            params.buffer_size,
+        )?,
         None => (),
     };
 

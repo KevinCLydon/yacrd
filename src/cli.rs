@@ -30,6 +30,7 @@ SOFTWARE.
 /// - extract: for sequence or overlap file, record contains reads marked as Chimeric or NotCovered is written in the output
 /// - split: for sequence file bad region in the middle of reads are removed, NotCovered read is removed
 /// - scrubb: for sequence file all bad region are removed, NotCovered read is removed
+/// - pluck: for sequence file all bad regions are output, NotCovered reads are removed
 #[derive(clap::Parser, Debug)]
 #[clap(
     version = "1.0.0 Magby",
@@ -90,6 +91,10 @@ pub enum SubCommand {
     /// Record mark as chimeric or NotCovered is split
     #[clap()]
     Split(Split),
+
+    /// Bad regions of records are output
+    #[clap()]
+    Pluck(Pluck)
 }
 
 #[derive(clap::Parser, Debug)]
@@ -134,4 +139,19 @@ pub struct Split {
     /// path to output file, format and compression of input is preserved
     #[clap(short = 'o', long = "output", required = true)]
     pub output: String,
+}
+
+#[derive(clap::Parser, Debug)]
+pub struct Pluck {
+    /// path to sequence input (fasta|fastq), compression is autodetected (none|gzip|bzip2|lzma)
+    #[clap(short = 'i', long = "input", required = true)]
+    pub input: String,
+
+    /// path to output file, format and compression of input is preserved
+    #[clap(short = 'o', long = "output", required = true)]
+    pub output: String,
+
+    /// Minimum length of a bad region interval to include in output (defaults to 50)
+    #[clap(short = 'l', long = "length", required = false)]
+    pub minimum_length: Option<u32>,
 }
